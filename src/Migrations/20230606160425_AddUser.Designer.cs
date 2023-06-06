@@ -12,7 +12,7 @@ using app.Contexts;
 namespace app.Migrations
 {
     [DbContext(typeof(PostgresContext))]
-    [Migration("20230606133203_AddUser")]
+    [Migration("20230606160425_AddUser")]
     partial class AddUser
     {
         /// <inheritdoc />
@@ -37,12 +37,15 @@ namespace app.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("TelegramChatId")

@@ -19,5 +19,24 @@ public class PostgresContext : DbContext
         optionsBuilder.UseNpgsql(POSTGRES_CONNECTION_STRING);
     }
 
-    public DbSet<User> Users { get; set; }
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var addedEntities = ChangeTracker.Entries().Where(x => x.State == EntityState.Added).ToList();
+        foreach (var entity in addedEntities)
+        {
+            entity.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
+            entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+        }
+
+        var modifiedEntities = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified).ToList();
+
+        foreach (var entity in modifiedEntities)
+        {
+            entity.Property("UpdatedAt").CurrentValue = DateTime.UtcNow;
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public required DbSet<User> Users { get; set; }
 }
