@@ -1,6 +1,19 @@
 version: "3.9"
 
 services:
+  db:
+    image: postgres:13.2-alpine
+    container_name: ${PROJECT}-db
+    restart: always
+    networks:
+      - ${PROJECT}-network
+    volumes:
+      - ${PROJECT}-pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./.env
+
   app:
     image: ${PROJECT}-app
     build:
@@ -18,6 +31,10 @@ services:
       - ./.env
     working_dir: /code
     command: tail -f /dev/null
+
+volumes:
+  dotnet-telegram-bot-pgdata:
+    name: ${PROJECT}-pgdata
 
 networks:
   dotnet-telegram-bot-network:
