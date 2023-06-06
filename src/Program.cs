@@ -1,19 +1,16 @@
+using app.Contexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Set urls
 builder.WebHost.UseUrls("http://*:80");
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<PostgresContext>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
