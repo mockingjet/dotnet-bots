@@ -16,7 +16,8 @@ public class PostgresContext : DbContext
         var POSTGRES_PASSWORD = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
         var POSTGRES_DB = Environment.GetEnvironmentVariable("POSTGRES_DB");
         String POSTGRES_CONNECTION_STRING = $"Host={POSTGRES_HOST};Port={POSTGRES_PORT};Username={POSTGRES_USER};Password={POSTGRES_PASSWORD};Database={POSTGRES_DB};";
-        Console.WriteLine(POSTGRES_CONNECTION_STRING);
         optionsBuilder.UseNpgsql(POSTGRES_CONNECTION_STRING);
     }
+
+    public DbSet<User> Users { get; set; }
 }
