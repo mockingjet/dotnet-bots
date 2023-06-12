@@ -30,4 +30,10 @@ public class TelegramBot
         var info = await GetBotInfo();
         return info.Username!;
     }
+
+    public async Task SetBotWebhook(string url)
+    {
+        await _client.SetWebhookAsync(url);
+        Console.WriteLine("Set Telegram bot webhook: " + url);
+    }
 }
