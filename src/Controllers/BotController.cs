@@ -2,6 +2,7 @@ using System.Text.Json;
 
 using app.Bots;
 using app.Contexts;
+using app.Handlers;
 using app.Helpers;
 
 using Microsoft.AspNetCore.Mvc;
@@ -15,19 +16,20 @@ namespace app.Controllers;
 public class BotController : ControllerBase
 {
     private readonly TelegramBot _bot;
-
+    private readonly TelegramBotHandler _handler;
     private readonly PostgresContext _context;
 
-    public BotController(TelegramBot bot, PostgresContext context)
+    public BotController(TelegramBot bot, TelegramBotHandler handler, PostgresContext context)
     {
         _bot = bot;
+        _handler = handler;
         _context = context;
     }
 
     [HttpPost("callback")]
-    public ActionResult Callback([FromBody] JsonElement update)
+    public async Task<ActionResult> Callback([FromBody] Update update)
     {
-        Console.WriteLine(JsonSerializer.Serialize(update));
+        await _handler.HandleAsync(update);
         return Ok();
     }
 

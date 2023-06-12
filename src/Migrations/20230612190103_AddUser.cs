@@ -21,7 +21,7 @@ namespace app.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    TelegramChatId = table.Column<string>(type: "text", nullable: true),
+                    TelegramChatId = table.Column<long>(type: "bigint", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },

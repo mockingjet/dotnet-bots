@@ -10,7 +10,7 @@ public class User
 
     public required string Password { get; set; }
 
-    public string? TelegramChatId { get; set; }
+    public long? TelegramChatId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -25,7 +25,7 @@ public class UserUpdate
 
     public required string Password { get; set; }
 
-    public string? TelegramChatId { get; set; }
+    public long? TelegramChatId { get; set; }
 }
 
 public class UserPartiallyUpdate
@@ -36,6 +36,6 @@ public class UserPartiallyUpdate
 
     public string? Password { get; set; }
 
-    public string? TelegramChatId { get; set; }
+    public long? TelegramChatId { get; set; }
 
 }

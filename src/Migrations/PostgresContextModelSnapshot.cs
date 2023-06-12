@@ -45,8 +45,8 @@ namespace app.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("TelegramChatId")
-                        .HasColumnType("text");
+                    b.Property<long?>("TelegramChatId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
