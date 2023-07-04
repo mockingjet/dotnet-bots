@@ -33,9 +33,9 @@ services:
     command: tail -f /dev/null
 
 volumes:
-  dotnet-telegram-bot-pgdata:
+  dotnet-bots-pgdata:
     name: ${PROJECT}-pgdata
 
 networks:
-  dotnet-telegram-bot-network:
+  dotnet-bots-network:
     name: ${PROJECT}-network
