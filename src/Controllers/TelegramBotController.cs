@@ -12,14 +12,14 @@ using Telegram.Bot.Types;
 namespace app.Controllers;
 
 [ApiController]
-[Route("bot")]
-public class BotController : ControllerBase
+[Route("telegram/bot")]
+public class TelegramBotController : ControllerBase
 {
     private readonly TelegramBot _bot;
     private readonly TelegramBotHandler _handler;
     private readonly PostgresContext _context;
 
-    public BotController(TelegramBot bot, TelegramBotHandler handler, PostgresContext context)
+    public TelegramBotController(TelegramBot bot, TelegramBotHandler handler, PostgresContext context)
     {
         _bot = bot;
         _handler = handler;

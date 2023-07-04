@@ -7,8 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://*:80");
 
 builder.Services.AddDbContext<PostgresContext>();
+builder.Services.AddSingleton<LineNotify>();
 builder.Services.AddSingleton<TelegramBot>();
 builder.Services.AddScoped<TelegramBotHandler>();
+builder.Services.AddHttpClient();
 builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
