@@ -41,7 +41,6 @@ public class LineNotifyController : ControllerBase
         var res = await _bot.SendMessageAsync(token, "綁定成功!");
         if (res is false) return BadRequest("send message failed");
 
-        // 此處回傳內容會顯示在 Line Notify Redirect 網頁上
         // todo: 回傳HTML
         return Ok("Success");
     }
@@ -55,5 +54,18 @@ public class LineNotifyController : ControllerBase
         var base64UserId = Base64Helper.GetBase64String(userId);
         var link = _bot.GetLineNotifyAuthorizeLink(base64UserId);
         return Ok(link);
+    }
+
+    [HttpPost("send_message")]
+    public async Task<IActionResult> SendMessageAsync(int userId, string message)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user is null) return NotFound();
+        if (user.LineNotifyToken is null) return BadRequest("user not bind line notify");
+
+        var res = await _bot.SendMessageAsync(user.LineNotifyToken, message);
+        if (res is false) return BadRequest("send message failed");
+
+        return Ok();
     }
 }

@@ -54,9 +54,14 @@ public class TelegramBotController : ControllerBase
 
 
     [HttpPost("send_message")]
-    public async Task<IActionResult> SendMessageAsync(long chatId, string text)
+    public async Task<IActionResult> SendMessageAsync(int userId, string text)
     {
-        await _bot.SendMessageAsync(chatId, text);
+        var user = await _context.Users.FindAsync(userId);
+        if (user is null) return NotFound();
+        if (user.TelegramChatId is null) return BadRequest("user not bind telegram chat room");
+
+        await _bot.SendMessageAsync((long)user.TelegramChatId, text);
+
         return Ok();
     }
 }
