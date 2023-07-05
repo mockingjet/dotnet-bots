@@ -27,7 +27,7 @@ public class TelegramBotController : ControllerBase
     }
 
     [HttpPost("callback")]
-    public async Task<ActionResult> Callback([FromBody] Update update)
+    public async Task<ActionResult> CallbackAsync([FromBody] Update update)
     {
         await _handler.HandleAsync(update);
         return Ok();

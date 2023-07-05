@@ -12,6 +12,8 @@ public class User
 
     public long? TelegramChatId { get; set; }
 
+    public string? LineNotifyToken { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public DateTime UpdatedAt { get; set; }
@@ -26,6 +28,8 @@ public class UserUpdate
     public required string Password { get; set; }
 
     public long? TelegramChatId { get; set; }
+
+    public string? LineNotifyToken { get; set; }
 }
 
 public class UserPartiallyUpdate
@@ -38,4 +42,5 @@ public class UserPartiallyUpdate
 
     public long? TelegramChatId { get; set; }
 
+    public string? LineNotifyToken { get; set; }
 }

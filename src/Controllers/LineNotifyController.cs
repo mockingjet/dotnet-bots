@@ -23,14 +23,27 @@ public class LineNotifyController : ControllerBase
     }
 
     [HttpGet("callback")]
-    public async Task<ActionResult> Callback(string? code, string? state)
+
+    public async Task<ActionResult> CallbackAsync(string? code, string? state)
     {
-        if (code is null || state is null) return BadRequest();
+        if (code is null || state is null) return BadRequest("code or state is null");
+
         var token = await _bot.GetTokenAsync(code);
-        Console.WriteLine(token);
-        // todo: bind token to user(state) data
-        // todo: reply bind success to user
-        return Ok(token);
+        if (token is null) return BadRequest("token is null");
+
+        var useId = Base64Helper.GetIntValue(state);
+        var user = await _context.Users.FindAsync(useId);
+        if (user is null) return BadRequest("state is invalid");
+
+        user.LineNotifyToken = token;
+        await _context.SaveChangesAsync();
+
+        var res = await _bot.SendMessageAsync(token, "綁定成功!");
+        if (res is false) return BadRequest("send message failed");
+
+        // 此處回傳內容會顯示在 Line Notify Redirect 網頁上
+        // todo: 回傳HTML
+        return Ok("Success");
     }
 
     [HttpGet("get_user_start_link")]

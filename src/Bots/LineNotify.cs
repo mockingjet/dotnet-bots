@@ -12,8 +12,6 @@ class TokenResponseDTO
 
 public class LineNotify
 {
-    private string domain = "https://082f-150-116-128-26.ngrok-free.app";
-
     private readonly HttpClient _client;
 
     public LineNotify(HttpClient httpClient)
@@ -24,12 +22,13 @@ public class LineNotify
     public String GetLineNotifyAuthorizeLink(String state)
     {
         var clientId = Environment.GetEnvironmentVariable("LINE_NOTIFY_CLIENT_ID");
+        var publicUrl = Environment.GetEnvironmentVariable("PUBLIC_URL");
 
-        var link = $"https://notify-bot.line.me/oauth/authorize";
-        link += $"?response_type=code";
+        var link = "https://notify-bot.line.me/oauth/authorize";
+        link += "?response_type=code";
         link += $"&client_id={clientId}";
-        link += $"&redirect_uri={domain}/line/notify/callback";
-        link += $"&scope=notify";
+        link += $"&redirect_uri={publicUrl}/line/notify/callback";
+        link += "&scope=notify";
         link += $"&state={state}";
 
         return link;
@@ -37,17 +36,18 @@ public class LineNotify
 
     public async Task<String?> GetTokenAsync(String code)
     {
-        var link = $"https://notify-bot.line.me/oauth/token";
+        var link = "https://notify-bot.line.me/oauth/token";
 
         var clientId = Environment.GetEnvironmentVariable("LINE_NOTIFY_CLIENT_ID")!;
         var clientSecret = Environment.GetEnvironmentVariable("LINE_NOTIFY_CLIENT_SECRET")!;
+        var publicUrl = Environment.GetEnvironmentVariable("PUBLIC_URL");
 
         var payload = new Dictionary<String, String>();
         payload.Add("code", code);
         payload.Add("client_id", clientId);
         payload.Add("client_secret", clientSecret);
         payload.Add("grant_type", "authorization_code");
-        payload.Add("redirect_uri", $"{domain}/line/notify/callback");
+        payload.Add("redirect_uri", $"{publicUrl}/line/notify/callback");
 
         var content = new FormUrlEncodedContent(payload);
         HttpResponseMessage res = await _client.PostAsync(link, content);
@@ -59,5 +59,22 @@ public class LineNotify
         }
 
         return null;
+    }
+
+    public async Task<Boolean> SendMessageAsync(String token, String message)
+    {
+        var link = "https://notify-api.line.me/api/notify";
+
+        var request = new HttpRequestMessage(HttpMethod.Post, link);
+        request.Headers.Add("Authorization", $"Bearer {token}");
+
+        var payload = new Dictionary<String, String>();
+        payload.Add("message", message);
+
+        request.Content = new FormUrlEncodedContent(payload);
+
+        HttpResponseMessage res = await _client.SendAsync(request);
+
+        return res.IsSuccessStatusCode;
     }
 }
